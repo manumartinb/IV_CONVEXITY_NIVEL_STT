@@ -47,6 +47,11 @@ section#evidence { max-width: 1200px; margin: 28px auto 0 auto; display: flex; f
 .ev-table tbody tr:hover { background: rgba(88, 166, 255, 0.06); }
 .ev-table th:first-child, .ev-table td:first-child { text-align: left; }
 .ev-table .raw-row td { font-weight: 600; background: rgba(255,255,255,0.025); }
+.ev-table.dual { font-size: 11.5px; }
+.ev-table.dual th, .ev-table.dual td { padding: 5px 7px; }
+.ev-table.dual thead th { text-align: center; }
+.ev-table.dual .med-col { background: rgba(88,166,255,0.05); color: #9db4cc; }
+.ev-table.dual thead tr:first-child th[colspan] { border-bottom: 1px solid #444c56; font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.4px; }
 .pos { color: #3fb950; font-weight: 600; }
 .neg { color: #f85149; font-weight: 600; }
 .rules { max-width: 1200px; margin: 18px auto; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 16px 20px 14px 20px; }
@@ -133,11 +138,15 @@ section#evidence { max-width: 1200px; margin: 28px auto 0 auto; display: flex; f
     <h2>Edge de IV_CONV por percentil vs RAW</h2>
     <p>Cohortes definidas por percentil expanding del IV_CONV al dia de entrada. RAW es el universo entero (sin filtro).
        <code>mean d001-d030</code> es el promedio de los 30 PnL diarios; <code>edge</code> es la diferencia vs RAW.</p>
-    <table class="ev-table" id="tbl-ivc">
-      <thead><tr><th>Corte</th><th>N</th><th>dias</th><th>d020</th><th>d030</th><th>mean d001-d030</th><th>edge</th><th>WR d030</th><th>PF d030</th></tr></thead>
+    <table class="ev-table dual" id="tbl-ivc">
+      <thead>
+        <tr><th rowspan="2">Corte</th><th rowspan="2">N</th><th rowspan="2">dias</th><th colspan="2">d020</th><th colspan="2">d030</th><th colspan="2">avg d1-d30</th><th colspan="2">edge avg</th><th rowspan="2">WR d030</th><th rowspan="2">PF d030</th></tr>
+        <tr><th>mean</th><th>med</th><th>mean</th><th>med</th><th>mean</th><th>med</th><th>mean</th><th>med</th></tr>
+      </thead>
       <tbody></tbody>
     </table>
-    <img src="evidence/stt_pnl_trajectory_ivc.png" alt="PnL trajectory by IVC cut" loading="lazy">
+    <p style="font-size:11.5px;color:#8b949e;margin-top:4px">Doble panel: <strong>mean</strong> (sensible a cola/outliers) y <strong>median</strong> (tendencia central robusta). Los charts de abajo replican ambos.</p>
+    <img src="evidence/stt_pnl_trajectory_ivc.png" alt="PnL trajectory by IVC cut [mean | median]" loading="lazy">
   </div>
 
   <!-- TABLE 2: VIX cuts vs RAW -->
@@ -147,8 +156,11 @@ section#evidence { max-width: 1200px; margin: 28px auto 0 auto; display: flex; f
     <p>Mismo formato, ahora con VIX al dia de entrada (percentil rank simple sobre el universo).
        Notese que VIX en aislamiento tiene mas edge que IV_CONV: la mayor parte del aparente edge
        de IV_CONV en bulk era VIX riding.</p>
-    <table class="ev-table" id="tbl-vix">
-      <thead><tr><th>Corte</th><th>N</th><th>dias</th><th>d020</th><th>d030</th><th>mean d001-d030</th><th>edge</th><th>WR d030</th><th>PF d030</th></tr></thead>
+    <table class="ev-table dual" id="tbl-vix">
+      <thead>
+        <tr><th rowspan="2">Corte</th><th rowspan="2">N</th><th rowspan="2">dias</th><th colspan="2">d020</th><th colspan="2">d030</th><th colspan="2">avg d1-d30</th><th colspan="2">edge avg</th><th rowspan="2">WR d030</th><th rowspan="2">PF d030</th></tr>
+        <tr><th>mean</th><th>med</th><th>mean</th><th>med</th><th>mean</th><th>med</th><th>mean</th><th>med</th></tr>
+      </thead>
       <tbody></tbody>
     </table>
   </div>
@@ -159,11 +171,15 @@ section#evidence { max-width: 1200px; margin: 28px auto 0 auto; display: flex; f
     <h2>Cohortes 3x3 IVC x VIX</h2>
     <p>Particionamos IV_CONV pct y VIX pct en bajo/medio/alto (terciles) y cruzamos.
        Solo se muestran celdas con N&ge;20 trades. Vease el heatmap para localizar la celda de oro.</p>
-    <table class="ev-table" id="tbl-joint">
-      <thead><tr><th>Cohorte</th><th>N</th><th>dias</th><th>d020</th><th>d030</th><th>mean d001-d030</th><th>edge</th><th>WR d030</th><th>PF d030</th></tr></thead>
+    <table class="ev-table dual" id="tbl-joint">
+      <thead>
+        <tr><th rowspan="2">Cohorte</th><th rowspan="2">N</th><th rowspan="2">dias</th><th colspan="2">d020</th><th colspan="2">d030</th><th colspan="2">avg d1-d30</th><th colspan="2">edge avg</th><th rowspan="2">WR d030</th><th rowspan="2">PF d030</th></tr>
+        <tr><th>mean</th><th>med</th><th>mean</th><th>med</th><th>mean</th><th>med</th><th>mean</th><th>med</th></tr>
+      </thead>
       <tbody></tbody>
     </table>
-    <img src="evidence/stt_joint_heatmap.png" alt="Joint heatmap IVC x VIX" loading="lazy">
+    <p style="font-size:11.5px;color:#8b949e;margin-top:4px">La celda <strong>IVC alto &amp; VIX bajo</strong> (mean d030 -10.0) es el unico cuadro rojo del panel MEAN. En el panel MEDIAN se vuelve +2.5: la -10 es artefacto de 8 trades pre-COVID (feb-2020). Vease heatmap dual.</p>
+    <img src="evidence/stt_joint_heatmap.png" alt="Joint heatmap IVC x VIX [mean | median]" loading="lazy">
   </div>
 
   <!-- TABLE 4: AND/OR composite -->
@@ -173,11 +189,14 @@ section#evidence { max-width: 1200px; margin: 28px auto 0 auto; display: flex; f
     <p>Comparativa directa: cada senal sola, su interseccion (AND) y su union (OR).
        <strong>Setup de oro = AND</strong>: cuando ambos estan en su TOP20%, edge maximo.
        OR es menos selectivo pero mas grande.</p>
-    <table class="ev-table" id="tbl-combo">
-      <thead><tr><th>Cohorte</th><th>N</th><th>dias</th><th>d020</th><th>d030</th><th>mean d001-d030</th><th>edge</th><th>WR d030</th><th>PF d030</th></tr></thead>
+    <table class="ev-table dual" id="tbl-combo">
+      <thead>
+        <tr><th rowspan="2">Cohorte</th><th rowspan="2">N</th><th rowspan="2">dias</th><th colspan="2">d020</th><th colspan="2">d030</th><th colspan="2">avg d1-d30</th><th colspan="2">edge avg</th><th rowspan="2">WR d030</th><th rowspan="2">PF d030</th></tr>
+        <tr><th>mean</th><th>med</th><th>mean</th><th>med</th><th>mean</th><th>med</th><th>mean</th><th>med</th></tr>
+      </thead>
       <tbody></tbody>
     </table>
-    <img src="evidence/stt_and_or_composite.png" alt="AND/OR composite trajectory" loading="lazy">
+    <img src="evidence/stt_and_or_composite.png" alt="AND/OR composite trajectory [mean | median]" loading="lazy">
   </div>
 
 </section>
@@ -207,32 +226,37 @@ fetch('data.json?v=' + Date.now()).then(r => r.json()).then(data => {
   document.getElementById('kpi-baseline').innerHTML = `
     <div class="kpi"><div class="k">N trades</div><div class="vv">${b.n_trades.toLocaleString()}</div></div>
     <div class="kpi"><div class="k">N dias</div><div class="vv">${b.n_days.toLocaleString()}</div></div>
-    <div class="kpi"><div class="k">RAW d020</div><div class="vv">${b.mean_d020 >= 0 ? '+' : ''}${b.mean_d020.toFixed(2)}</div></div>
-    <div class="kpi"><div class="k">RAW d030</div><div class="vv">${b.mean_d030 >= 0 ? '+' : ''}${b.mean_d030.toFixed(2)}</div></div>
-    <div class="kpi"><div class="k">RAW mean d1-d30</div><div class="vv">${b.mean_d001_d030 >= 0 ? '+' : ''}${b.mean_d001_d030.toFixed(2)}</div></div>
+    <div class="kpi"><div class="k">RAW d030 mean</div><div class="vv">${b.mean_d030 >= 0 ? '+' : ''}${b.mean_d030.toFixed(2)}</div></div>
+    <div class="kpi"><div class="k">RAW d030 median</div><div class="vv">${b.med_d030 >= 0 ? '+' : ''}${b.med_d030.toFixed(2)}</div></div>
+    <div class="kpi"><div class="k">RAW avg d1-d30 mean</div><div class="vv">${b.mean_d001_d030 >= 0 ? '+' : ''}${b.mean_d001_d030.toFixed(2)}</div></div>
+    <div class="kpi"><div class="k">RAW avg d1-d30 median</div><div class="vv">${b.med_d001_d030 >= 0 ? '+' : ''}${b.med_d001_d030.toFixed(2)}</div></div>
     <div class="kpi"><div class="k">RAW WR d030</div><div class="vv">${b.wr_d030.toFixed(1)}%</div></div>
     <div class="kpi"><div class="k">r(IVC, PnL d030)</div><div class="vv">${data.stats.r_spearman_ivc_pnl_d030.toFixed(3)}</div></div>
     <div class="kpi"><div class="k">r(VIX, PnL d030)</div><div class="vv">${data.stats.r_spearman_vix_pnl_d030.toFixed(3)}</div></div>
     <div class="kpi"><div class="k">r(IVC pct, VIX)</div><div class="vv">${data.stats.r_spearman_pct_vix.toFixed(3)}</div></div>
   `;
 
-  // Tables
+  // Tables (dual mean | median)
   function fillTbl(tblId, rows) {
     const tbody = document.querySelector('#' + tblId + ' tbody');
-    tbody.innerHTML = rows.filter(r => r).map(r => {
+    const valid = rows.filter(r => r);
+    // RAW = primera fila => baseline para edge
+    const raw = valid[0];
+    const rawMean = raw.avg_mean, rawMed = raw.avg_med;
+    const sg = (x) => (x >= 0 ? '+' : '') + x.toFixed(2);
+    const cls = (x) => x > 0 ? 'pos' : (x < 0 ? 'neg' : '');
+    tbody.innerHTML = valid.map(r => {
       const isRaw = r.label.startsWith('RAW');
-      const edgeClass = isRaw ? '' : (r.edge_d001_d030 > 0 ? 'pos' : 'neg');
-      const edgeSign = r.edge_d001_d030 >= 0 ? '+' : '';
-      const d20Sign = r.d20 >= 0 ? '+' : '';
-      const d30Sign = r.d30 >= 0 ? '+' : '';
-      const avgSign = r.avg_d001_d030 >= 0 ? '+' : '';
+      const edgeMean = r.avg_mean - rawMean;
+      const edgeMed  = r.avg_med  - rawMed;
       return `<tr class="${isRaw ? 'raw-row' : ''}">
         <td>${r.label}</td>
         <td>${r.n}</td><td>${r.days}</td>
-        <td>${d20Sign}${r.d20.toFixed(2)}</td>
-        <td>${d30Sign}${r.d30.toFixed(2)}</td>
-        <td>${avgSign}${r.avg_d001_d030.toFixed(2)}</td>
-        <td><span class="${edgeClass}">${isRaw ? '-' : edgeSign + r.edge_d001_d030.toFixed(2)}</span></td>
+        <td>${sg(r.d20_mean)}</td><td class="med-col">${sg(r.d20_med)}</td>
+        <td>${sg(r.d30_mean)}</td><td class="med-col">${sg(r.d30_med)}</td>
+        <td>${sg(r.avg_mean)}</td><td class="med-col">${sg(r.avg_med)}</td>
+        <td><span class="${isRaw?'':cls(edgeMean)}">${isRaw ? '-' : sg(edgeMean)}</span></td>
+        <td class="med-col"><span class="${isRaw?'':cls(edgeMed)}">${isRaw ? '-' : sg(edgeMed)}</span></td>
         <td>${r.wr30.toFixed(1)}%</td>
         <td>${r.pf30}</td>
       </tr>`;
