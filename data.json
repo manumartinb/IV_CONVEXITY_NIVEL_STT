@@ -4,7 +4,9 @@
     "ivc_raw": 0.0319,
     "ivc_pct": 65.56091676718938,
     "vix": 16.28,
-    "regime_ivc": "NEUTRAL"
+    "regime_ivc": "NEUTRAL",
+    "vix_pct": 41.49785144260282,
+    "regime_vix": "NEUTRAL"
   },
   "series": [
     {

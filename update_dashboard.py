@@ -48,6 +48,8 @@ def banda(p):
     if p >= 80: return 'FAVORABLE'
     if p <= 20: return 'ADVERSO'
     return 'NEUTRAL'
+# Percentil VIX del ultimo dia (rank en universo, coherente con cohort tables)
+latest_vix_pct = float(sub.loc[sub['dia']==latest['dia'], 'vix_pct'].mean())
 
 def cohort(d, label):
     if len(d)==0: return None
@@ -70,7 +72,8 @@ RAW_AVG_MED  = sub[pnl_cols].median().mean()
 
 data = {
     'latest': {'date': latest['dia'].strftime('%Y-%m-%d'), 'ivc_raw': float(latest['iv_conv_raw']),
-               'ivc_pct': float(latest['ivc_pct']), 'vix': float(latest['vix']), 'regime_ivc': banda(latest['ivc_pct'])},
+               'ivc_pct': float(latest['ivc_pct']), 'vix': float(latest['vix']), 'regime_ivc': banda(latest['ivc_pct']),
+               'vix_pct': latest_vix_pct, 'regime_vix': banda(latest_vix_pct)},
     'series': [{'t': r['dia'].strftime('%Y-%m-%d'), 'p': round(float(r['ivc_pct']),2),
                 'v': round(float(r['vix']),2), 'r': round(float(r['iv_conv_raw'])*100,4)} for _, r in daily.iterrows()],
     'meta': {'dataset': 'STT_CLASSIC_V9_MERGED_T0_mediana', 'n_trades': int(len(sub)),

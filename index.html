@@ -18,7 +18,8 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Ro
 .header { max-width: 1200px; margin: 0 auto 16px auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
 h1 { font-size: 18px; margin: 0; font-weight: 600; }
 .subtitle { color: var(--muted); font-size: 13px; margin-top: 2px; }
-.latest { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; min-width: 240px; }
+.latest-group { display: flex; gap: 10px; flex-wrap: wrap; }
+.latest { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; min-width: 190px; }
 .latest .v { font-size: 26px; font-weight: 700; }
 .latest .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; }
 .latest .vix-mini { font-size: 12px; color: var(--muted); margin-top: 4px; }
@@ -76,10 +77,17 @@ section#evidence { max-width: 1200px; margin: 28px auto 0 auto; display: flex; f
     <h1>IV_CONVEXITY NIVEL - STT V9 Dashboard</h1>
     <div class="subtitle">Concavidad de la PUT smile + VIX (PUT BWB +K1 -2K2 +K3, DTE 150-170)</div>
   </div>
-  <div class="latest">
-    <div class="label">Ultimo dato <span id="latest-date">--</span></div>
-    <div><span class="v" id="latest-value">--</span><span class="regime" id="latest-regime">--</span></div>
-    <div class="vix-mini">VIX: <span id="latest-vix">--</span> &middot; IV_CONV raw: <span id="latest-raw">--</span>%</div>
+  <div class="latest-group">
+    <div class="latest">
+      <div class="label">IV_CONV pct &middot; <span id="latest-date">--</span></div>
+      <div><span class="v" id="latest-value">--</span><span class="regime" id="latest-regime">--</span></div>
+      <div class="vix-mini">raw: <span id="latest-raw">--</span>%</div>
+    </div>
+    <div class="latest">
+      <div class="label">VIX pct &middot; regime</div>
+      <div><span class="v" id="latest-vixpct">--</span><span class="regime" id="latest-vixregime">--</span></div>
+      <div class="vix-mini">VIX close: <span id="latest-vix">--</span></div>
+    </div>
   </div>
 </div>
 
@@ -239,6 +247,12 @@ fetch('data.json?v=' + Date.now()).then(r => r.json()).then(data => {
   rEl.className = 'regime ' + data.latest.regime_ivc;
   document.getElementById('latest-vix').textContent = data.latest.vix.toFixed(2);
   document.getElementById('latest-raw').textContent = (data.latest.ivc_raw * 100).toFixed(3);
+  if (data.latest.vix_pct !== undefined) {
+    document.getElementById('latest-vixpct').textContent = data.latest.vix_pct.toFixed(1);
+    const vEl = document.getElementById('latest-vixregime');
+    vEl.textContent = data.latest.regime_vix;
+    vEl.className = 'regime ' + data.latest.regime_vix;
+  }
 
   // Meta
   document.getElementById('meta-universe').textContent =
