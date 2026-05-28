@@ -182,10 +182,15 @@ dpsf['ivc_proxy_raw'] = (dpsf['iv_5d']+dpsf['iv_30d'])/2 - dpsf['iv_15d']
 dpsf['ivc_d'] = expanding_pct(dpsf['ivc_proxy_raw'].values)
 dpsf['atm_d'] = expanding_pct(dpsf['iv_50d'].values)
 dpsf['ps_d']  = dpsf['skew_25d_vs50_pct_expanding']
+# SPX close (cotizacion) para el eje secundario del grafico
+_spx = pd.read_csv(r'C:/Users/Administrator/Desktop/FINAL DATA/SP_SPX_CLOSE_HISTORICAL_PRICES.csv', usecols=['time','close'])
+_spx['dia'] = pd.to_datetime(_spx['time']).dt.normalize()
+_spx = _spx.rename(columns={'close':'spx_close'})[['dia','spx_close']]
+dpsf = dpsf.merge(_spx, on='dia', how='left')
 dser = dpsf.dropna(subset=['ivc_d','atm_d','ps_d']).reset_index(drop=True)
 data['series'] = [{'t':r['dia'].strftime('%Y-%m-%d'),'ivc':round(float(r['ivc_d']),2),
                    'vix':round(float(r['atm_d']),2),'ps':round(float(r['ps_d']),2),
-                   'vraw':round(float(r['iv_50d']),4)} for _,r in dser.iterrows()]
+                   'spx':(round(float(r['spx_close']),2) if pd.notna(r['spx_close']) else None)} for _,r in dser.iterrows()]
 _last = dser.iloc[-1]
 data['latest'] = {'date':_last['dia'].strftime('%Y-%m-%d'),
     'ivc_pct':float(_last['ivc_d']),'regime_ivc':banda(_last['ivc_d']),

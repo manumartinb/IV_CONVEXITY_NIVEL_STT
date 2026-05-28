@@ -242,7 +242,7 @@ fetch('data.json?v=' + Date.now()).then(r => r.json()).then(data => {
   const t = data.series.map(d=>d.t);
   const mk = (y,name,color,axis) => ({x:t, y:data.series.map(d=>d[y]), name, type:'scatter', mode:'lines', line:{color,width:1.1}, yaxis:axis||'y', hovertemplate:'%{x}<br>'+name+': <b>%{y:.1f}</b><extra></extra>'});
   const traces = [ mk('ivc','IV_CONV pct','#58a6ff'), mk('vix','IV ATM pct','#ff9f43'), mk('ps','PUT SKEW pct','#bc8cff'),
-                   {x:t, y:data.series.map(d=>d.vraw), name:'IV ATM raw', type:'scatter', mode:'lines', line:{color:'#6e7681',width:0.7,dash:'dot'}, yaxis:'y2', hovertemplate:'%{x}<br>IV ATM raw: <b>%{y:.3f}</b><extra></extra>'} ];
+                   {x:t, y:data.series.map(d=>d.spx), name:'SPX', type:'scatter', mode:'lines', line:{color:'#6e7681',width:0.9}, yaxis:'y2', connectgaps:true, hovertemplate:'%{x}<br>SPX: <b>%{y:,.0f}</b><extra></extra>'} ];
   Plotly.newPlot('chart', traces, {
     paper_bgcolor:'#161b22', plot_bgcolor:'#161b22', font:{color:'#c9d1d9',size:11},
     margin:{l:48,r:54,t:46,b:64},
@@ -257,7 +257,7 @@ fetch('data.json?v=' + Date.now()).then(r => r.json()).then(data => {
         bordercolor:'#30363d',borderwidth:1,x:0,y:1.16},
       rangeslider:{visible:false}},
     yaxis:{title:'percentil (0-100)',range:[0,100],showgrid:true,gridcolor:'#21262d'},
-    yaxis2:{title:'IV ATM raw',overlaying:'y',side:'right',showgrid:false,tickfont:{color:'#6e7681'}},
+    yaxis2:{title:'SPX',overlaying:'y',side:'right',showgrid:false,tickfont:{color:'#6e7681'}},
     legend:{x:0,y:-0.16,orientation:'h',bgcolor:'rgba(22,27,34,0.7)'},
     shapes:[{type:'line',xref:'paper',x0:0,x1:1,y0:80,y1:80,line:{color:'#3fb950',width:1,dash:'dot'}},
             {type:'line',xref:'paper',x0:0,x1:1,y0:20,y1:20,line:{color:'#f85149',width:1,dash:'dot'}}]
