@@ -11,7 +11,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 sys.stdout.reconfigure(encoding='utf-8')
 
-OUTDIR = r'C:/Users/Administrator/Desktop/BULK OPTIONSTRAT/ESTRATEGIAS/Skew/dashboards/IV_CONVEXITY_NIVEL_STT_DASHBOARD'
+OUTDIR = r'C:/Users/Administrator/Desktop/BULK OPTIONSTRAT/ESTRATEGIAS/Skew/dashboards/STT_REGIME_DASHBOARD'
 EVDIR  = os.path.join(OUTDIR, 'evidence')
 os.makedirs(EVDIR, exist_ok=True)
 

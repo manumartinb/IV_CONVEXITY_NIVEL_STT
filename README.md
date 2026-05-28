@@ -3,7 +3,7 @@
 Dashboard de 3 senales de regimen validadas contra STT V9 (PUT BWB +K1 -2K2 +K3,
 DTE 150-170, 1,629 trades + 1,223 dias unicos, 2019-2025).
 
-**Live:** https://manumartinb.github.io/IV_CONVEXITY_NIVEL_STT/
+**Live:** https://manumartinb.github.io/STT_REGIME/
 
 ## Las 3 senales (percentil expanding 0-100, ex-ante)
 
