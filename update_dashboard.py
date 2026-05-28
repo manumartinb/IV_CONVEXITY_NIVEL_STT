@@ -166,6 +166,36 @@ data['stats']={
     'corr_ivc_vix':sp('ivc_pct','vix_pct'),'corr_ivc_ps':sp('ivc_pct','ps_pct'),'corr_vix_ps':sp('vix_pct','ps_pct'),
     'r_ivc_pnl':sp('ivc_pct','PnL_d030'),'r_vix_pnl':sp('vix_pct','PnL_d030'),'r_ps_pnl':sp('ps_pct','PnL_d030'),
     'vix_method':'expanding','vix_gate_r_exp':sp('vix_pct','PnL_d030')}
+
+# ===== GRAFICO/PANEL = REGIMEN DIARIO A HOY (decoupled del estudio backtest) =====
+# Las tablas/stats de arriba quedan FIJAS (backtest STT, IV_CONV trade-specific).
+# El grafico + panel 'latest' se actualizan a la ultima fecha de mercado disponible
+# en SKEW_PUT_ENRICHED @dte160 (como el dashboard PUT_SKEW_NIVEL_BATMAN_LT):
+#   IV ATM  = iv_50d (directo)
+#   PUT SKEW = skew_25d_vs50_pct_expanding (directo)
+#   IV_CONV = proxy de mercado (iv_5d+iv_30d)/2 - iv_15d  [rho +0.84 con la trade-specific]
+print('[6] Serie diaria regimen-a-hoy (chart/panel) ...', flush=True)
+dpsf = pd.read_csv(PS_PATH, usecols=['trade_date','dte_target','iv_5d','iv_15d','iv_30d','iv_50d','skew_25d_vs50_pct_expanding'])
+dpsf['dia'] = pd.to_datetime(dpsf['trade_date']).dt.normalize()
+dpsf = dpsf[dpsf['dte_target']==160].sort_values('dia').reset_index(drop=True)
+dpsf['ivc_proxy_raw'] = (dpsf['iv_5d']+dpsf['iv_30d'])/2 - dpsf['iv_15d']
+dpsf['ivc_d'] = expanding_pct(dpsf['ivc_proxy_raw'].values)
+dpsf['atm_d'] = expanding_pct(dpsf['iv_50d'].values)
+dpsf['ps_d']  = dpsf['skew_25d_vs50_pct_expanding']
+dser = dpsf.dropna(subset=['ivc_d','atm_d','ps_d']).reset_index(drop=True)
+data['series'] = [{'t':r['dia'].strftime('%Y-%m-%d'),'ivc':round(float(r['ivc_d']),2),
+                   'vix':round(float(r['atm_d']),2),'ps':round(float(r['ps_d']),2),
+                   'vraw':round(float(r['iv_50d']),4)} for _,r in dser.iterrows()]
+_last = dser.iloc[-1]
+data['latest'] = {'date':_last['dia'].strftime('%Y-%m-%d'),
+    'ivc_pct':float(_last['ivc_d']),'regime_ivc':banda(_last['ivc_d']),
+    'vix_pct':float(_last['atm_d']),'regime_vix':banda(_last['atm_d']),
+    'ps_pct':float(_last['ps_d']),'regime_ps':banda(_last['ps_d']),
+    'vix_raw':float(_last['iv_50d']),'ivc_raw':float(_last['ivc_proxy_raw'])}
+data['meta']['chart_date_max'] = _last['dia'].strftime('%Y-%m-%d')
+data['meta']['chart_n_days']  = int(len(dser))
+print(f'    serie diaria: {len(dser)} dias, ultima {data["latest"]["date"]}')
+
 with open(os.path.join(OUTDIR,'data.json'),'w') as f: json.dump(data,f,indent=2)
 print('[4] data.json saved')
 

@@ -102,7 +102,10 @@ section.evidence { max-width:1200px; margin:0 auto; display:flex; flex-direction
   <strong>IV ATM</strong> = nivel IV ATM (iv_50d) @dte160 percentil expanding (eje vol, migrado desde VIX) &middot;
   <strong>PUT SKEW NIVEL</strong> = <code>skew_25d_vs50_pct_expanding</code> @ dte160 (prima de cola en puts, 25d vs ATM).
   Bandas: <strong>FAVORABLE</strong> &ge;80, <strong>NEUTRAL</strong> 20-80, <strong>ADVERSO</strong> &le;20.
-  Universo: STT V9 2019-2025, las 3 senales presentes.
+  Universo del estudio: STT V9 2019-2025, las 3 senales presentes.
+  <br><strong>Grafico + panel superior = regimen DIARIO a hoy</strong> (ultima fecha de mercado disponible en SKEW_PUT_ENRICHED @dte160);
+  ahi IV_CONV es <strong>proxy de mercado</strong> <code>(iv_5d+iv_30d)/2 - iv_15d</code> (rho +0.84 con la trade-specific).
+  <strong>Tablas de abajo = backtest STT frozen</strong> (2019-2025, IV_CONV trade-specific). Por eso el panel y las tablas son de fechas distintas.
 </div>
 
 <div class="rules">
